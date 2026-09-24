@@ -2,16 +2,8 @@
  * API Service for communicating with the FastAPI Backend
  */
 
-// Dynamically determine the backend host based on the current browser URL
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    const host = window.location.hostname || '127.0.0.1';
-    return `http://${host}:8000`;
-  }
-  return import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-};
-
-const API_BASE_URL = getBaseUrl();
+// Base backend API URL from environment variable, falling back to local backend for development
+export const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/+$/, '');
 
 /**
  * Health check endpoint

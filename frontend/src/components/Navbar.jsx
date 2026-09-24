@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrainCircuit, ExternalLink } from 'lucide-react';
+import { API_BASE_URL } from '../services/api';
 
 export default function Navbar({ healthStatus }) {
   const isOnline = healthStatus?.status === 'healthy';
@@ -28,7 +29,7 @@ export default function Navbar({ healthStatus }) {
           </div>
 
           <a
-            href="http://127.0.0.1:8000/docs"
+            href={`${API_BASE_URL}/docs`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary"

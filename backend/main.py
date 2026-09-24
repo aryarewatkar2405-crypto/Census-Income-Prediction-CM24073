@@ -13,6 +13,7 @@ import os
 import json
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 
 import joblib
@@ -25,12 +26,12 @@ from pydantic import BaseModel, Field, ConfigDict
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("census-api")
 
-# Directory paths
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(CURRENT_DIR, "model")
-MODEL_PATH = os.path.join(MODEL_DIR, "census_income_model.pkl")
-METRICS_PATH = os.path.join(MODEL_DIR, "model_metrics.json")
-DATASET_INFO_PATH = os.path.join(MODEL_DIR, "dataset_info.json")
+# Robust directory paths based on current file location
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = BASE_DIR / "model"
+MODEL_PATH = MODEL_DIR / "census_income_model.pkl"
+METRICS_PATH = MODEL_DIR / "model_metrics.json"
+DATASET_INFO_PATH = MODEL_DIR / "dataset_info.json"
 
 # Global state dictionary for loaded artifacts
 ml_artifacts: Dict[str, Any] = {
@@ -48,9 +49,9 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing Census Income Prediction API...")
     
     # 1. Load Model Pipeline
-    if os.path.exists(MODEL_PATH):
+    if MODEL_PATH.exists():
         try:
-            ml_artifacts["model"] = joblib.load(MODEL_PATH)
+            ml_artifacts["model"] = joblib.load(str(MODEL_PATH))
             ml_artifacts["model_loaded"] = True
             if hasattr(ml_artifacts["model"], "classes_"):
                 ml_artifacts["target_classes"] = list(ml_artifacts["model"].classes_)
@@ -63,7 +64,7 @@ async def lifespan(app: FastAPI):
         ml_artifacts["model_loaded"] = False
         
     # 2. Load Metrics JSON
-    if os.path.exists(METRICS_PATH):
+    if METRICS_PATH.exists():
         try:
             with open(METRICS_PATH, "r", encoding="utf-8") as f:
                 ml_artifacts["metrics"] = json.load(f)
@@ -72,7 +73,7 @@ async def lifespan(app: FastAPI):
             logger.error("Failed to load metrics from %s: %s", METRICS_PATH, e)
             
     # 3. Load Dataset Info JSON
-    if os.path.exists(DATASET_INFO_PATH):
+    if DATASET_INFO_PATH.exists():
         try:
             with open(DATASET_INFO_PATH, "r", encoding="utf-8") as f:
                 ml_artifacts["dataset_info"] = json.load(f)
@@ -96,11 +97,29 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS for frontend communication
+# Configure CORS for local development and production Vercel deployment
+default_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
+]
+
+allowed_origins = list(default_origins)
+env_origins = os.getenv("FRONTEND_URL", os.getenv("ALLOWED_ORIGINS", "")).strip()
+if env_origins:
+    for origin in env_origins.split(","):
+        origin_clean = origin.strip().rstrip("/")
+        if origin_clean and origin_clean not in allowed_origins:
+            allowed_origins.append(origin_clean)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"^https:\/\/.*\.vercel\.app$",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -278,7 +297,7 @@ async def health_check():
 async def get_metrics():
     """Returns actual performance metrics, confusion matrix, and sample counts from Phase 1."""
     if ml_artifacts["metrics"] is None:
-        if os.path.exists(METRICS_PATH):
+        if METRICS_PATH.exists():
             try:
                 with open(METRICS_PATH, "r", encoding="utf-8") as f:
                     ml_artifacts["metrics"] = json.load(f)
@@ -305,7 +324,7 @@ async def get_metrics():
 async def get_dataset_info():
     """Returns feature definitions, types, and schema used by the frontend to render input forms."""
     if ml_artifacts["dataset_info"] is None:
-        if os.path.exists(DATASET_INFO_PATH):
+        if DATASET_INFO_PATH.exists():
             try:
                 with open(DATASET_INFO_PATH, "r", encoding="utf-8") as f:
                     ml_artifacts["dataset_info"] = json.load(f)
@@ -390,4 +409,7 @@ async def predict_income(input_data: CensusIncomeInput):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("main:app", host=host, port=port, reload=False)
+

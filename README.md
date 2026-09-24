@@ -366,16 +366,69 @@ python train_model.py
 
 ---
 
+## 🚀 Public Cloud Deployment Guide
+
+This project is structured for easy deployment to **Render** (FastAPI Backend) and **Vercel** (React Frontend).
+
+### 1. Backend Deployment (Render)
+
+1. Sign in to [Render](https://render.com/) and click **New +** $\rightarrow$ **Web Service**.
+2. Connect your GitHub repository: `aryarewatkar2405-crypto/Census-Income-Prediction-CM24073`.
+3. Configure the service parameters:
+   - **Name**: `census-income-backend` (or your choice)
+   - **Region**: Any (e.g., Oregon, Frankfurt)
+   - **Branch**: `main`
+   - **Root Directory**: `backend`
+   - **Runtime**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+4. *(Optional)* Add Environment Variables under **Advanced**:
+   - `FRONTEND_URL`: `https://<YOUR-VERCEL-APP-NAME>.vercel.app` (Can be set after frontend deployment)
+5. Click **Create Web Service**. Once deployed, copy your Render backend URL (e.g., `https://census-income-backend.onrender.com`).
+
+---
+
+### 2. Frontend Deployment (Vercel)
+
+1. Sign in to [Vercel](https://vercel.com/) and click **Add New...** $\rightarrow$ **Project**.
+2. Import your GitHub repository: `aryarewatkar2405-crypto/Census-Income-Prediction-CM24073`.
+3. Configure project settings:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: Click *Edit* and select `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Expand **Environment Variables** and add:
+   - **Key**: `VITE_API_URL`
+   - **Value**: `https://<YOUR-RENDER-BACKEND-URL>` (e.g., `https://census-income-backend.onrender.com`)
+5. Click **Deploy**. Vercel will build and assign a production URL (e.g., `https://census-income-ai.vercel.app`).
+
+---
+
+### 3. Connecting Frontend & Backend
+
+1. Once your Vercel deployment completes, copy the assigned Vercel URL.
+2. In Render, navigate to your backend web service $\rightarrow$ **Environment** $\rightarrow$ set `FRONTEND_URL` to your Vercel URL.
+3. Your full-stack cloud deployment is now live and fully linked!
+
+---
+
 ## 🔐 Environment Variables
 
 Environment variables are managed safely via `.env` files (which are ignored by Git):
 
-### Frontend (`frontend/.env`)
+### Frontend (`frontend/.env.local` or Vercel Settings)
 ```ini
 # FastAPI Backend URL
 VITE_API_URL=http://127.0.0.1:8000
 ```
 *(A template is provided in [`frontend/.env.example`](file:///c:/Project/Census-Income-Prediction/frontend/.env.example))*
+
+### Backend (`backend/.env` or Render Settings)
+```ini
+# Optional: Allowed Frontend Origin for CORS (e.g., Vercel domain)
+FRONTEND_URL=https://your-app.vercel.app
+PORT=8000
+```
 
 ---
 
