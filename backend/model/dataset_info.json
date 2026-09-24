@@ -1,0 +1,54 @@
+{
+  "dataset_name": "Adult / Census Income Dataset (OpenML version 2)",
+  "description": "Predict whether an individual's annual income exceeds $50K/year based on census data.",
+  "total_samples": 48842,
+  "total_features": 14,
+  "target_column": "class",
+  "target_classes": [
+    "<=50K",
+    ">50K"
+  ],
+  "target_distribution": {
+    "<=50K": 37155,
+    ">50K": 11687
+  },
+  "numerical_features": [
+    "age",
+    "fnlwgt",
+    "education-num",
+    "capital-gain",
+    "capital-loss",
+    "hours-per-week"
+  ],
+  "categorical_features": [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country"
+  ],
+  "feature_count": {
+    "numerical": 6,
+    "categorical": 8,
+    "total": 14
+  },
+  "features_detail": {
+    "age": "Age of the individual (numeric)",
+    "workclass": "Employment sector/status (categorical)",
+    "fnlwgt": "Final sampling weight (numeric)",
+    "education": "Highest level of education completed (categorical)",
+    "education-num": "Highest level of education in numerical format (numeric)",
+    "marital-status": "Marital status of the individual (categorical)",
+    "occupation": "General occupational category (categorical)",
+    "relationship": "Relationship status to householder (categorical)",
+    "race": "Race/ethnicity (categorical)",
+    "sex": "Gender (categorical)",
+    "capital-gain": "Capital gains recorded (numeric)",
+    "capital-loss": "Capital losses recorded (numeric)",
+    "hours-per-week": "Working hours per week (numeric)",
+    "native-country": "Country of origin (categorical)"
+  }
+}
