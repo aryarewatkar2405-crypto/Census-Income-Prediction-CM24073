@@ -2,12 +2,17 @@
 
 > **An End-to-End Machine Learning System for Socio-Economic Income Classification Powered by Scikit-Learn, FastAPI, and React.**
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://census-income-prediction.vercel.app/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.4%2B-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+---
+
+> 🌐 **Live Web Application:** [https://census-income-prediction.vercel.app/](https://census-income-prediction.vercel.app/)
 
 ---
 
@@ -400,14 +405,14 @@ This project is structured for easy deployment to **Render** (FastAPI Backend) a
 4. Expand **Environment Variables** and add:
    - **Key**: `VITE_API_URL`
    - **Value**: `https://<YOUR-RENDER-BACKEND-URL>` (e.g., `https://census-income-backend.onrender.com`)
-5. Click **Deploy**. Vercel will build and assign a production URL (e.g., `https://census-income-ai.vercel.app`).
+5. Click **Deploy**. Vercel will build and assign the production URL: [https://census-income-prediction.vercel.app/](https://census-income-prediction.vercel.app/).
 
 ---
 
 ### 3. Connecting Frontend & Backend
 
-1. Once your Vercel deployment completes, copy the assigned Vercel URL.
-2. In Render, navigate to your backend web service $\rightarrow$ **Environment** $\rightarrow$ set `FRONTEND_URL` to your Vercel URL.
+1. Once your Vercel deployment completes, your frontend is accessible at [https://census-income-prediction.vercel.app/](https://census-income-prediction.vercel.app/).
+2. In Render, navigate to your backend web service $\rightarrow$ **Environment** $\rightarrow$ set `FRONTEND_URL` to `https://census-income-prediction.vercel.app`.
 3. Your full-stack cloud deployment is now live and fully linked!
 
 ---
