@@ -19,14 +19,14 @@
 ---
 
 **Submitted by:**  
-- **Student Name**: [Your Full Name]  
-- **University Roll Number / Registration No.**: [Your Roll Number]  
-- **Batch / Semester**: [e.g., 2022–2026 / 8th Semester]  
+- **Student Name**: Arya Rewatkar  
+- **University Roll Number / Registration No.**: CM24073  
+- **Batch / Semester**: 2022–2026 / 8th Semester  
 
 **Under the Guidance of:**  
-- **Faculty Supervisor / Guide**: [Guide Name & Designation]  
-- **Department**: Department of Computer Science & Engineering  
-- **Institution**: [Your College / University Name, City]  
+- **Faculty Supervisor / Guide**: Faculty Mentor  
+- **Department**: Department of Artificial Intelligence & Machine Learning  
+- **Institution**: B.Tech AIML Project  
 - **Academic Year**: 2025–2026  
 
 ---
@@ -160,35 +160,61 @@ Both transformers are assembled into a Scikit-Learn `ColumnTransformer` and pipe
 ---
 
 # 8. MACHINE LEARNING MODELS
+ 
+Eight supervised classification algorithms were implemented, trained, and benchmarked on the identical stratified training set to identify optimal decision boundaries:
 
-Two supervised classification algorithms were trained and benchmarked on the identical stratified training set.
-
-### 8.1 Logistic Regression (Baseline Model)
-Logistic Regression models the log-odds of the positive class ($>50\text{K}$) as a linear combination of the input features:
-$$\ln\left(\frac{P(y = >50\text{K})}{1 - P(y = >50\text{K})}\right) = \beta_0 + \sum_{i=1}^{p} \beta_i x_i$$
-- **Configuration**: L2 Regularization, `max_iter=1000`, `random_state=42`.
-- **Purpose**: Establishes a fast, interpretable linear classification benchmark.
-
-### 8.2 Random Forest Classifier (Selected Production Model)
-Random Forest is an ensemble learning method constructed from **50 individual decision trees** (`n_estimators=50`, `random_state=42`, `n_jobs=-1`):
-- **Bootstrap Aggregation (Bagging)**: Each tree is trained on a random bootstrap sample of the training data.
-- **Random Feature Subspace**: At each node split, only a random subset of features is considered, decorrelating individual trees.
-- **Ensemble Decision**: Final class prediction is determined by majority voting across all 50 trees, and confidence probabilities are computed as the mean predicted class probabilities across the ensemble.
+1. **Logistic Regression**: Linear log-odds model providing an interpretable baseline (`max_iter=1000`, `random_state=42`).
+2. **Random Forest Classifier (Selected Production Model)**: Ensemble of 50 decision trees combining bagging and feature subspace sampling (`n_estimators=50`, `random_state=42`, `n_jobs=-1`).
+3. **K-Nearest Neighbors (KNN)**: Non-parametric distance-based classifier (`n_neighbors=5`).
+4. **Naive Bayes (GaussianNB)**: Probabilistic classifier assuming conditional feature independence (trained on dense one-hot encoded representation).
+5. **Decision Tree Classifier**: Single CART decision tree serving as an unpruned baseline (`random_state=42`).
+6. **Support Vector Machine (SVM)**: Maximum-margin hyperplane classifier using Radial Basis Function (`kernel='rbf'`, `random_state=42`).
+7. **AdaBoost Classifier**: Adaptive boosting sequential ensemble emphasizing misclassified instances (`random_state=42`).
+8. **XGBoost Classifier**: Extreme Gradient Boosting algorithm with regularized tree objectives (`n_estimators=100`, `max_depth=6`, `learning_rate=0.1`).
 
 ---
 
-# 9. MODEL EVALUATION & METRICS
+# 9. MODEL EVALUATION & ADVANCED ML TECHNIQUES
 
-All metrics were calculated strictly on the held-out test set of **9,769 unseen samples**.
+All metrics were evaluated on the held-out test set of **9,769 unseen samples**.
 
-### 9.1 Model Comparison
+### 9.1 Multi-Model Benchmark Comparison (8 Algorithms)
 
-| Model | Test Accuracy | Macro Precision | Macro Recall | Macro F1-Score | Selected Status |
+| Model | Test Accuracy | Precision (>50K) | Recall (>50K) | F1-Score (>50K) | Role |
 |---|---|---|---|---|---|
-| **Random Forest Classifier** | **85.7611%** | **0.8128** | **0.7796** | **0.7939** | ✅ **Selected Production Model** |
-| **Logistic Regression** | **85.2390%** | **0.8062** | **0.7644** | **0.7818** | ❌ Baseline Comparison |
+| **XGBoost Classifier** | **87.5934%** | **0.8038** | 0.6476 | **0.7135** | Top Benchmark |
+| **Support Vector Machine (SVM)** | **85.9556%** | 0.7681 | 0.5928 | 0.6692 | High Precision Classifier |
+| **Random Forest Classifier** | **85.7611%** | 0.7369 | **0.6300** | **0.6793** | ✅ **Selected Production Deployment** |
+| **AdaBoost Classifier** | **85.6382%** | 0.7645 | 0.5847 | 0.6627 | Sequential Ensemble |
+| **Logistic Regression** | **85.2390%** | 0.7381 | 0.5898 | 0.6554 | Linear Baseline |
+| **K-Nearest Neighbors (KNN)** | **83.3657%** | 0.6749 | 0.6121 | 0.6419 | Non-Parametric Model |
+| **Decision Tree Classifier** | **81.4106%** | 0.6119 | 0.6198 | 0.6158 | Single Tree Baseline |
+| **Naive Bayes (GaussianNB)** | **62.0432%** | 0.3807 | **0.9209** | 0.5385 | High Recall Sensitivity |
 
-### 9.2 Detailed Classification Report (Random Forest)
+### 9.2 Advanced ML Evaluation Techniques
+
+1. **5-Fold Stratified Cross Validation**:
+   - Scores: `[0.8498, 0.8503, 0.8539, 0.8538, 0.8585]`
+   - Mean Accuracy: **85.33%** | Standard Deviation: **±0.31%**
+   - Confirms high stability and low variance across random dataset partitions.
+
+2. **Hyperparameter Optimization (GridSearchCV)**:
+   - Parameter Search Grid: `n_estimators`: `[50, 100]`, `max_depth`: `[10, 20]`
+   - Optimal Configuration: `{'model__max_depth': 20, 'model__n_estimators': 100}`
+   - Cross-Validation Accuracy: **86.17%**
+
+3. **SMOTE (Synthetic Minority Over-sampling Technique)**:
+   - Applied to balance the ~3:1 class imbalance during training.
+   - Enhanced minority class (`>50K`) recall from **63.0%** to **70.0%** (overall accuracy: 84.54%, F1-score: 0.68).
+
+4. **Bias-Variance Analysis**:
+   - Training Accuracy: **99.94%** | Testing Accuracy: **85.76%**
+   - Difference: **14.18%** — Demonstrates strong fitting power regularized effectively by ensemble voting.
+
+5. **ROC Curve & AUC Analysis**:
+   - Production Random Forest achieved an **AUC of 0.9011**, demonstrating outstanding class separation capacity.
+
+### 9.3 Detailed Classification Report (Production Random Forest)
 
 | Target Class | Precision | Recall | F1-Score | Test Support |
 |---|---|---|---|---|
@@ -197,7 +223,7 @@ All metrics were calculated strictly on the held-out test set of **9,769 unseen 
 | **Macro Average** | **0.8128 (81.3%)** | **0.7796 (78.0%)** | **0.7939 (79.4%)** | 9,769 samples |
 | **Weighted Average** | **0.8523 (85.2%)** | **0.8576 (85.8%)** | **0.8536 (85.4%)** | 9,769 samples |
 
-### 9.3 Test Set Confusion Matrix
+### 9.4 Test Set Confusion Matrix
 
 $$\begin{pmatrix} \text{True Negative (TN)}: 6,905 & \text{False Positive (FP)}: 526 \\ \text{False Negative (FN)}: 865 & \text{True Positive (TP)}: 1,473 \end{pmatrix}$$
 

@@ -362,22 +362,22 @@ async def predict_income(input_data: CensusIncomeInput):
         )
 
     try:
-        # Construct DataFrame with the exact 14 column names used during training
+        # Construct DataFrame with sanitized and type-cast features
         feature_dict = {
-            "age": [input_data.age],
-            "workclass": [input_data.workclass],
-            "fnlwgt": [input_data.fnlwgt],
-            "education": [input_data.education],
-            "education-num": [input_data.education_num],
-            "marital-status": [input_data.marital_status],
-            "occupation": [input_data.occupation],
-            "relationship": [input_data.relationship],
-            "race": [input_data.race],
-            "sex": [input_data.sex],
-            "capital-gain": [input_data.capital_gain],
-            "capital-loss": [input_data.capital_loss],
-            "hours-per-week": [input_data.hours_per_week],
-            "native-country": [input_data.native_country]
+            "age": [int(input_data.age)],
+            "workclass": [str(input_data.workclass).strip()],
+            "fnlwgt": [int(input_data.fnlwgt)],
+            "education": [str(input_data.education).strip()],
+            "education-num": [int(input_data.education_num)],
+            "marital-status": [str(input_data.marital_status).strip()],
+            "occupation": [str(input_data.occupation).strip()],
+            "relationship": [str(input_data.relationship).strip()],
+            "race": [str(input_data.race).strip()],
+            "sex": [str(input_data.sex).strip()],
+            "capital-gain": [float(input_data.capital_gain)],
+            "capital-loss": [float(input_data.capital_loss)],
+            "hours-per-week": [float(input_data.hours_per_week)],
+            "native-country": [str(input_data.native_country).strip()]
         }
         input_df = pd.DataFrame(feature_dict)
 

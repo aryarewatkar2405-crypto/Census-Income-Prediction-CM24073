@@ -20,12 +20,12 @@ export default function AboutSection() {
               <Cpu size={20} />
             </div>
             <div>
-              <h4 style={{ fontSize: '1rem', color: '#0F172A' }}>Phase 1: ML Model Training</h4>
-              <span style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>85.76% ACCURACY</span>
+              <h4 style={{ fontSize: '1rem', color: '#0F172A' }}>Phase 1: ML Model Engineering</h4>
+              <span style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>8 CLASSIFIERS & 85.76% ACC</span>
             </div>
           </div>
           <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5 }}>
-            Trained on 48,842 Adult Census records using an 80/20 stratified split. Preprocessing is encapsulated in a scikit-learn ColumnTransformer (StandardScaler + OneHotEncoder) inside a 50-tree Random Forest pipeline to eliminate data leakage.
+            Trained on 48,842 Adult Census records using an 80/20 stratified split. Evaluates 8 classifiers (XGBoost, Random Forest, SVM, AdaBoost, Logistic Regression, KNN, Decision Tree, Naive Bayes) alongside 5-fold CV, GridSearchCV tuning, SMOTE, and ROC-AUC (0.901).
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function AboutSection() {
             </div>
           </div>
           <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5 }}>
-            A lightweight, responsive single-page application providing real-time model inference, 1-click test presets, confusion matrix visualizer, and dynamic dataset cataloging.
+            A lightweight, responsive single-page application providing real-time model inference, 1-click test presets, multi-model benchmarks, confusion matrix visualizer, and dynamic dataset cataloging.
           </p>
         </div>
       </div>

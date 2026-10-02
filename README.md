@@ -207,14 +207,28 @@ pipeline = Pipeline([
 ])
 ```
 
-### Model Benchmarks
+### Model Benchmarks (8 Algorithms Tested)
 
-| Model | Parameters | Test Accuracy | Macro Precision | Macro Recall | Macro F1-Score | Status |
+| Model | Parameters / Details | Test Accuracy | Precision (>50K) | Recall (>50K) | F1-Score (>50K) | Role |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Random Forest Classifier** | `n_estimators=50, random_state=42` | **85.76%** | **81.28%** | **77.96%** | **0.7939** | **Selected** |
-| **Logistic Regression** | `max_iter=1000, random_state=42` | 85.24% | 80.70% | 76.51% | 0.7818 | Baseline |
+| **XGBoost Classifier** | `n_estimators=100, max_depth=6, lr=0.1` | **87.59%** | **80.38%** | 64.76% | **0.7135** | Top Benchmark |
+| **Support Vector Machine (SVM)** | `kernel='rbf', random_state=42` | 85.96% | 76.81% | 59.28% | 0.6692 | High Precision Baseline |
+| **Random Forest Classifier** | `n_estimators=50, random_state=42` | **85.76%** | 73.69% | **63.00%** | **0.6793** | **Production Deployed Model** |
+| **AdaBoost Classifier** | `n_estimators=50, random_state=42` | 85.64% | 76.45% | 58.47% | 0.6627 | Boosting Baseline |
+| **Logistic Regression** | `max_iter=1000, random_state=42` | 85.24% | 73.81% | 58.98% | 0.6554 | Linear Baseline |
+| **K-Nearest Neighbors (KNN)** | `n_neighbors=5` | 83.37% | 67.49% | 61.21% | 0.6419 | Non-parametric Baseline |
+| **Decision Tree Classifier** | `random_state=42` | 81.41% | 61.19% | 61.98% | 0.6158 | Single Tree Baseline |
+| **Naive Bayes (GaussianNB)** | `dense OneHotEncoder` | 62.04% | 38.07% | **92.09%** | 0.5385 | High Recall Baseline |
 
-### Confusion Matrix & Performance
+### Advanced Model Evaluation & Optimization
+
+- **5-Fold Cross Validation**: Mean CV Accuracy of **85.33%** (±0.31% std), demonstrating stable generalization.
+- **Hyperparameter Optimization (GridSearchCV)**: Optimal Random Forest parameters identified as `max_depth=20`, `n_estimators=100` yielding **86.17%** CV accuracy.
+- **SMOTE Class Balancing**: Synthetic oversampling increased minority class (`>50K`) recall from **63.0%** to **70.0%**.
+- **Bias-Variance Analysis**: Training Accuracy (**99.94%**) vs Testing Accuracy (**85.76%**) with a 14.18% gap, effectively regularized by ensemble averaging.
+- **ROC Curve & AUC**: Random Forest achieved an **AUC of 0.9011**, confirming superior discriminative ability between `<=50K` and `>50K`.
+
+### Confusion Matrix & Performance (Production Random Forest)
 
 Evaluated on **9,769 unseen test records** (80/20 stratified split):
 

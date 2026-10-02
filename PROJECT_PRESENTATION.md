@@ -14,10 +14,10 @@
 - **Title**: Census Income Prediction
 - **Subtitle**: An End-to-End Machine Learning System for Binary Income Classification
 - **Student Details**:
-  - *Presented by*: [Your Name]
-  - *Department / Degree*: Computer Science / Data Science / AI
-  - *Institution*: [Your College / University Name]
-  - *Project Supervisor*: [Supervisor / Professor Name]
+  - *Presented by*: Arya Rewatkar
+  - *Roll Number / ID*: CM24073
+  - *Department / Degree*: B.Tech Artificial Intelligence & Machine Learning
+  - *Project Supervisor*: Faculty Mentor
   - *Academic Year*: 2025–2026
 - **Visual Design**: Minimalist clean white slide with a crisp royal blue banner/accent bar, subtle grid pattern, and tech stack badges (Python, Scikit-Learn, FastAPI, React).
 
@@ -37,10 +37,11 @@
 - **Header**: Key Project Goals & Scope
 - **Key Points**:
   1. **Data Science & ML Pipeline**: Clean, preprocess, and train accurate machine learning models without data leakage.
-  2. **Model Benchmarking**: Compare linear classification (Logistic Regression) against non-linear ensemble methods (Random Forest Classifier).
-  3. **Model Serialization**: Export an end-to-end `scikit-learn` Pipeline containing both preprocessing transformers and the trained estimator into a portable `.pkl` artifact.
-  4. **Production API Engine**: Build a lightweight, asynchronous REST API using **FastAPI** to serve real-time predictions.
-  5. **Interactive UI Dashboard**: Develop a modern, responsive **React + Vite** dashboard with real-time probability visualization and dynamic confusion matrix reporting.
+  2. **Multi-Model Benchmarking**: Compare 8 classification models (XGBoost, Random Forest, SVM, AdaBoost, Logistic Regression, KNN, Decision Tree, Gaussian Naive Bayes).
+  3. **Advanced ML Evaluation**: Perform 5-Fold Cross Validation, GridSearchCV tuning, SMOTE imbalance handling, Bias-Variance analysis, and ROC-AUC evaluation.
+  4. **Model Serialization**: Export an end-to-end `scikit-learn` Pipeline containing preprocessing and the Random Forest estimator into `census_income_model.pkl`.
+  5. **Production API Engine**: Build a lightweight, asynchronous REST API using **FastAPI** to serve real-time predictions.
+  6. **Interactive UI Dashboard**: Develop a modern, responsive **React + Vite** dashboard with real-time probability visualization and dynamic confusion matrix reporting.
 - **Recommended Visual**: 3-pillar icon graphic representing *Data Science*, *API Engineering*, and *User Experience*.
 
 ---
@@ -72,32 +73,30 @@
 
 ---
 
-### Slide 6: Machine Learning Models Evaluated
-- **Header**: Model Selection & Rationale
+### Slide 6: Multi-Model Benchmark (8 Algorithms Evaluated)
+- **Header**: Comprehensive Classifier Comparison
 - **Key Points**:
-  - **1. Logistic Regression (Baseline Model)**:
-    - Linear classification model with L2 regularization (`max_iter=1000`).
-    - Evaluated as an interpretable linear baseline.
-    - *Accuracy Achieved*: **85.24%**
-  - **2. Random Forest Classifier (Selected Production Model)**:
-    - Ensemble learning method combining **50 decision trees** with bootstrap aggregation (bagging).
-    - Effectively models complex non-linear relationships, multi-feature interactions, and categorical feature splits.
-    - *Accuracy Achieved*: **85.76%**
-- **Recommended Visual**: Comparison card highlighting why Random Forest was selected (higher accuracy, superior recall, and resistance to overfitting).
+  - **XGBoost Classifier**: **87.59%** Accuracy | **0.7135** F1-Score (Top overall performer)
+  - **Support Vector Machine (SVM - RBF)**: **85.96%** Accuracy | **76.8%** Precision
+  - **Random Forest (Production Model)**: **85.76%** Accuracy | **0.6793** F1 | 50-tree ensemble
+  - **AdaBoost Classifier**: **85.64%** Accuracy | **76.5%** Precision
+  - **Logistic Regression (Baseline)**: **85.24%** Accuracy | Linear log-odds model
+  - **K-Nearest Neighbors (KNN)**: **83.37%** Accuracy | $k=5$ distance neighbors
+  - **Decision Tree Classifier**: **81.41%** Accuracy | Single decision tree
+  - **Naive Bayes (Gaussian)**: **62.04%** Accuracy | High sensitivity (**92.1%** Recall)
+- **Recommended Visual**: Horizontal comparative bar chart highlighting the top 3 models and identifying Random Forest as the production deployed artifact.
 
 ---
 
-### Slide 7: Model Evaluation & Performance Metrics
-- **Header**: Test Set Evaluation (9,769 Unseen Samples)
+### Slide 7: Model Evaluation & Advanced Optimization Techniques
+- **Header**: Validation, Generalization, and In-Depth Diagnostics
 - **Key Points**:
-  - **Overall Accuracy**: **85.76%** (`0.857611`)
-  - **Macro Precision**: **81.28%**
-  - **Macro Recall**: **77.96%**
-  - **Macro F1-Score**: **79.39%**
-  - **Confusion Matrix Breakdown**:
-    - **True Negatives (`<=50K` correctly classified)**: 6,905 (92.9% recall)
-    - **True Positives (`>50K` correctly classified)**: 1,473 (63.0% recall)
-    - **False Positives (`<=50K` predicted as `>50K`)**: 526
+  - **5-Fold Cross Validation**: Mean CV Accuracy: **85.33%** (±0.31%), verifying stability.
+  - **Hyperparameter Optimization (GridSearchCV)**: Optimal params (`max_depth=20`, `n_estimators=100`) yielding **86.17%** CV score.
+  - **SMOTE Class Balancing**: Boosted minority class (`>50K`) recall from **63.0%** to **70.0%**.
+  - **Bias-Variance Analysis**: Train (99.94%) vs Test (85.76%) with a 14.18% gap well-controlled by ensembling.
+  - **ROC-AUC Performance**: Random Forest achieved **0.9011 AUC**, showing outstanding class discrimination.
+- **Recommended Visual**: Quadrant graphic showing Cross-Validation, GridSearchCV tuning, SMOTE recall increase, and ROC Curve.
     - **False Negatives (`>50K` predicted as `<=50K`)**: 865
 - **Recommended Visual**: A clean blue 2x2 Confusion Matrix Heatmap table alongside key metric gauge cards.
 
